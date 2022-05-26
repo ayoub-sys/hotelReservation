@@ -1,0 +1,129 @@
+
+--creation base de données--
+
+//customer table
+CREATE TABLE `customer` (
+  `CustomerID` int NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(45) NOT NULL,
+  `LastName` varchar(45) NOT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `username` varchar(45) NOT NULL,
+  `pass` varchar(45) NOT NULL,
+  `gender` char(1) NOT NULL,
+  PRIMARY KEY (`CustomerID`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8
+
+// employee table
+
+CREATE TABLE `employee` (
+  `EmployeeID` int NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(45) NOT NULL,
+  `LastName` varchar(45) NOT NULL,
+  `Age` varchar(45) DEFAULT NULL,
+  `WorkHours` int NOT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `username` varchar(45) NOT NULL,
+  `pass` varchar(45) NOT NULL,
+  `birthdate` date NOT NULL,
+  `gender` varchar(1) NOT NULL,
+  `FK_RoleID` int NOT NULL,
+  `FK_HotelID` int NOT NULL,
+  PRIMARY KEY (`EmployeeID`),
+  UNIQUE KEY `EmployeeID_UNIQUE` (`EmployeeID`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  KEY `fk_Employee_Role1_idx` (`FK_RoleID`),
+  KEY `fk_Employee_Hotel1_idx` (`FK_HotelID`),
+  CONSTRAINT `fk_Employee_Hotel1` FOREIGN KEY (`FK_HotelID`) REFERENCES `hotel` (`HotelID`),
+  CONSTRAINT `fk_Employee_Role1` FOREIGN KEY (`FK_RoleID`) REFERENCES `role` (`RoleID`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8
+
+//hotel table
+
+CREATE TABLE `hotel` (
+  `HotelID` int NOT NULL AUTO_INCREMENT,
+  `HotelName` varchar(45) NOT NULL,
+  `phone` varchar(45) NOT NULL,
+  `Location` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`HotelID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8
+
+// reservation table
+CREATE TABLE `reservation` (
+  `ReservationID` int NOT NULL AUTO_INCREMENT,
+  `checkin` date NOT NULL,
+  `checkout` date NOT NULL,
+  `date` date NOT NULL,
+  `period` int DEFAULT NULL,
+  `FK_RoomID` int NOT NULL,
+  `FK_CustID` int NOT NULL,
+  PRIMARY KEY (`ReservationID`),
+  UNIQUE KEY `ReservationID_UNIQUE` (`ReservationID`),
+  KEY `fk_Reservation_Room` (`FK_RoomID`),
+  KEY `fk_Reservation_Customer_idx` (`FK_CustID`),
+  CONSTRAINT `fk_Reservation_Customer` FOREIGN KEY (`FK_CustID`) REFERENCES `customer` (`CustomerID`),
+  CONSTRAINT `fk_Reservation_Room` FOREIGN KEY (`FK_RoomID`) REFERENCES `rooms` (`RoomID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
+
+//table role
+CREATE TABLE `role` (
+  `RoleID` int NOT NULL AUTO_INCREMENT,
+  `RoleName` varchar(45) NOT NULL,
+  `Salary` varchar(45) NOT NULL,
+  PRIMARY KEY (`RoleID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+
+// table rooms
+
+CREATE TABLE `rooms` (
+  `RoomID` int NOT NULL AUTO_INCREMENT,
+  `Rate` varchar(45) NOT NULL,
+  `RoomCost` varchar(45) NOT NULL,
+  `status` int NOT NULL,
+  `FK_RTypeID` int NOT NULL,
+  `features` varchar(45) DEFAULT NULL,
+  `NbOfBeds` int NOT NULL,
+  `FK_HotelID` int NOT NULL,
+  `Location` varchar(45) NOT NULL,
+  PRIMARY KEY (`RoomID`),
+  KEY `fk_Rooms_Hotel1_idx` (`FK_HotelID`),
+  KEY `fk_Rooms_RoomType1_idx` (`FK_RTypeID`),
+  CONSTRAINT `fk_Rooms_Hotel1` FOREIGN KEY (`FK_HotelID`) REFERENCES `hotel` (`HotelID`),
+  CONSTRAINT `fk_Rooms_RoomType1` FOREIGN KEY (`FK_RTypeID`) REFERENCES `roomtype` (`RTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8
+
+
+// table roomservice
+
+CREATE TABLE `roomservices` (
+  `FK_RoomID` int NOT NULL,
+  `FK_ServiceID` int NOT NULL,
+  `COST` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`FK_RoomID`,`FK_ServiceID`),
+  KEY `Services_FK_ServiceID` (`FK_ServiceID`),
+  CONSTRAINT `Rooms_FK_RoomID` FOREIGN KEY (`FK_RoomID`) REFERENCES `rooms` (`RoomID`),
+  CONSTRAINT `Services_FK_ServiceID` FOREIGN KEY (`FK_ServiceID`) REFERENCES `services` (`ServiceID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+// table roomtype
+CREATE TABLE `roomtype` (
+  `RTypeID` int NOT NULL AUTO_INCREMENT,
+  `category` varchar(255) NOT NULL,
+  `Description` varchar(255) NOT NULL,
+  PRIMARY KEY (`RTypeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
+
+// table service
+CREATE TABLE `services` (
+  `ServiceID` int NOT NULL AUTO_INCREMENT,
+  `ServiceName` varchar(45) NOT NULL,
+  `ServiceDesc` varchar(45) DEFAULT NULL,
+  `ServiceCost` varchar(45) NOT NULL,
+  PRIMARY KEY (`ServiceID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
+
+
+
+
+
